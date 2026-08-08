@@ -1,16 +1,9 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import type { ManifestoDoc } from "@/lib/manifesto";
 import { ManifestoHeader } from "@/components/ManifestoHeader";
 import { ManifestoSection } from "@/components/ManifestoSection";
 import { Reveal } from "@/components/Reveal";
-
-const AmbientNetwork = dynamic(
-  () =>
-    import("@/components/AmbientNetwork").then((mod) => mod.AmbientNetwork),
-  { ssr: false },
-);
 
 type Props = {
   doc: ManifestoDoc;
@@ -20,7 +13,6 @@ export function ManifestoExperience({ doc }: Props) {
   return (
     <main className="grid-ledger relative z-0 min-h-screen overflow-x-clip">
       <div className="paper-vignette pointer-events-none absolute inset-0 z-0" />
-      <AmbientNetwork />
 
       <div className="manifesto-content relative z-10 mx-auto max-w-3xl px-6 py-16 md:max-w-4xl md:px-8 md:py-24 lg:py-28">
         <ManifestoHeader {...doc.frontmatter} />
