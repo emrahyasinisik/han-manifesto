@@ -32,6 +32,18 @@ body {
   color: var(--color-muted);
 }
 
+.prose-manifesto-commitment {
+  font-size: 1.25rem;
+  line-height: 1.65;
+  color: var(--color-ink);
+}
+
+@media (min-width: 768px) {
+  .prose-manifesto-commitment {
+    font-size: 1.5rem;
+  }
+}
+
 .prose-manifesto p {
   margin: 0.85rem 0;
 }
@@ -58,4 +70,8 @@ body {
 
 .animate-fade-up-delay {
   animation: fade-up 0.7s ease-out 0.12s both;
+}
+
+.animate-fade-up-late {
+  animation: fade-up 0.7s ease-out 0.24s both;
 }

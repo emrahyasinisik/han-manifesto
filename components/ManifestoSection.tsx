@@ -6,7 +6,7 @@ type Props = {
 
 export function ManifestoSection({ index, title, html }: Props) {
   return (
-    <section className="border-t border-[var(--color-grid)] py-12 animate-fade-up-delay">
+    <section className="border-t border-[var(--color-grid)] py-10 md:py-12">
       <div className="mb-4 inline-block border border-[var(--color-ink)] bg-[var(--color-paper)] px-3 py-1 text-xs font-semibold tracking-wide">
         {index}
       </div>

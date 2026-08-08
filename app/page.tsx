@@ -10,9 +10,11 @@ export default async function HomePage() {
     <main className="grid-ledger relative min-h-screen">
       <div className="relative z-10 mx-auto max-w-3xl px-6 py-16 md:px-8 md:py-24">
         <ManifestoHeader {...doc.frontmatter} />
-        {doc.sections.map((section) => (
-          <ManifestoSection key={section.index} {...section} />
-        ))}
+        <div className="animate-fade-up-delay">
+          {doc.sections.map((section) => (
+            <ManifestoSection key={section.index} {...section} />
+          ))}
+        </div>
         <ManifestoCommitment html={doc.commitmentHtml} />
       </div>
     </main>
