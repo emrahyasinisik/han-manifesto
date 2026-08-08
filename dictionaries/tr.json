@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "title": "HAN Manifesto",
+    "description": "Hub for Agent Networks — ajanlar için ticaret verisinin ortak diline dair ilkeler.",
+    "demoTitle": "HAN Panel Demo",
+    "demoDescription": "HAN panelinin etkileşimli mock’u — pazaryerlerini tara, UCP sorunlarını incele, AI önerilerini onayla."
+  },
+  "localeSwitcher": {
+    "label": "Dil",
+    "en": "EN",
+    "tr": "TR"
+  },
+  "manifesto": {
+    "viewDemo": "Panel demosunu gör"
+  },
+  "demo": {
+    "eyebrow": "HAN · Panel demo",
+    "title": "Ürün analizi mock’u",
+    "lede": "İsim, açıklama ve fotoğrafları analiz eder — sonra düzeltme önerir. Her öneri yan yana before/after açılır ve ayrı onay ister.",
+    "backToManifesto": "← Manifesto",
+    "stepsAria": "Demo adımları",
+    "steps": {
+      "dashboard": "Panel",
+      "products": "Ürünler",
+      "queue": "Uygula"
+    },
+    "metrics": {
+      "products": "Ürünler",
+      "avgScore": "Ort. UCP skoru",
+      "critical": "Kritik sorunlar"
+    },
+    "status": {
+      "connected": "bağlı",
+      "syncing": "senkron",
+      "error": "hata"
+    },
+    "skus": "SKU",
+    "analyze": "Ürünleri analiz et",
+    "analyzing": "Fotoğraf, isim ve metin analiz ediliyor…",
+    "analyzeAgain": "Yeniden analiz et",
+    "viewResults": "Sonuçları gör",
+    "scanningHint": "Görseller, başlıklar ve açıklamalar UCP / SEO kurallarına göre kontrol ediliyor…",
+    "resultsTitle": "Analiz sonuçları",
+    "resultsLede": "Her öneriyi popup’ta tek tek incele — onayla veya reddet.",
+    "photos": "fotoğraf",
+    "suggestions": "öneri",
+    "photoIssue": "foto",
+    "criticalCount": "kritik",
+    "reviewQueue": "Uygulama kuyruğunu incele",
+    "queueTitle": "Parçalı uygulama",
+    "queueLede": "Yalnızca tek tek onaylanan öneriler kuyruğa girer — sonra rate-limit’li küçük partiler halinde uygulanır.",
+    "queueEmpty": "Henüz onay yok. Bir ürün popup’ı açıp önerileri tek tek onaylayın.",
+    "applying": "Parti uygulanıyor…",
+    "queueDone": "Demo tamam — her yazım loglandı; rollback anlık görüntüsü saklandı.",
+    "queueReady": "Uygulama simülasyonuna hazır.",
+    "apply": "Kademeli uygula",
+    "applied": "Uygulandı",
+    "backToProducts": "Ürünlere dön",
+    "modalEyebrow": "Öneri incelemesi",
+    "scoreMeta": "Skor {score}/100 · {platform} · {photos} fotoğraf analiz edildi",
+    "close": "Kapat",
+    "kind": {
+      "title": "İsim",
+      "description": "Açıklama",
+      "image": "Fotoğraflar",
+      "attribute": "Özellikler"
+    },
+    "severity": {
+      "critical": "kritik",
+      "medium": "orta",
+      "low": "düşük"
+    },
+    "needsApproval": "Onay bekliyor",
+    "approved": "Onaylandı",
+    "rejected": "Reddedildi",
+    "before": "Önce",
+    "after": "Sonra",
+    "approveFix": "Bu düzeltmeyi onayla",
+    "reject": "Reddet",
+    "modalFooter": "Onaylar öneri bazındadır — kuyruğu göndermeden hiçbir şey geri yazılmaz.",
+    "goToQueue": "Uygulama kuyruğuna git"
+  }
+}

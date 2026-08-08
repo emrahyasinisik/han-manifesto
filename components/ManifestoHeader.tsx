@@ -1,13 +1,23 @@
 import Link from "next/link";
+import type { Locale } from "@/lib/i18n";
 
 type Props = {
   brand: string;
   subline: string;
   title: string;
   intro: string;
+  locale: Locale;
+  viewDemoLabel: string;
 };
 
-export function ManifestoHeader({ brand, subline, title, intro }: Props) {
+export function ManifestoHeader({
+  brand,
+  subline,
+  title,
+  intro,
+  locale,
+  viewDemoLabel,
+}: Props) {
   return (
     <header className="mb-14 md:mb-20">
       <p className="hero-stagger hero-stagger-1 mb-4 max-w-full text-xs font-semibold uppercase leading-relaxed tracking-[0.12em] text-[var(--color-amber)] md:tracking-[0.18em]">
@@ -22,8 +32,8 @@ export function ManifestoHeader({ brand, subline, title, intro }: Props) {
         {intro}
       </p>
       <p className="hero-stagger hero-stagger-4 mt-6">
-        <Link href="/demo" className="manifesto-demo-link">
-          View panel demo
+        <Link href={`/${locale}/demo`} className="manifesto-demo-link">
+          {viewDemoLabel}
         </Link>
       </p>
       <div

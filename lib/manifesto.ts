@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { remark } from "remark";
 import html from "remark-html";
+import type { Locale } from "@/lib/i18n";
 
 export type ManifestoFrontmatter = {
   brand: string;
@@ -41,9 +42,17 @@ function splitSections(body: string): { title: string; body: string }[] {
   });
 }
 
+export function manifestoPath(locale: Locale): string {
+  return path.join(process.cwd(), `content/manifesto.${locale}.md`);
+}
+
 export async function loadManifesto(
-  filePath = path.join(process.cwd(), "content/manifesto.md"),
+  localeOrPath: Locale | string = "en",
 ): Promise<ManifestoDoc> {
+  const filePath =
+    localeOrPath === "en" || localeOrPath === "tr"
+      ? manifestoPath(localeOrPath)
+      : localeOrPath;
   const raw = await readFile(filePath, "utf8");
   const { data, content } = matter(raw);
   const frontmatter = data as ManifestoFrontmatter;

@@ -2,24 +2,26 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import type { Dictionary } from "@/lib/dictionaries";
 import {
-  DEMO_PRODUCTS,
   DEMO_STORES,
   averageScore,
   countBySeverity,
+  getDemoProducts,
   type DemoProduct,
   type Issue,
   type Severity,
 } from "@/lib/demo-data";
+import type { Locale } from "@/lib/i18n";
 
 type Step = "dashboard" | "products" | "queue";
 type Decision = "pending" | "approved" | "rejected";
+type DemoCopy = Dictionary["demo"];
 
-const STEPS: { id: Step; label: string }[] = [
-  { id: "dashboard", label: "Dashboard" },
-  { id: "products", label: "Products" },
-  { id: "queue", label: "Apply" },
-];
+type Props = {
+  locale: Locale;
+  copy: DemoCopy;
+};
 
 function severityClass(severity: Severity): string {
   if (severity === "critical") return "demo-pill demo-pill--critical";
@@ -27,14 +29,16 @@ function severityClass(severity: Severity): string {
   return "demo-pill demo-pill--low";
 }
 
-function kindLabel(kind: Issue["kind"]): string {
-  if (kind === "title") return "Name";
-  if (kind === "description") return "Description";
-  if (kind === "image") return "Photos";
-  return "Attributes";
+function fill(
+  template: string,
+  values: Record<string, string | number>,
+): string {
+  return template.replace(/\{(\w+)\}/g, (_, key: string) =>
+    String(values[key] ?? ""),
+  );
 }
 
-export function DemoPanel() {
+export function DemoPanel({ locale, copy }: Props) {
   const [step, setStep] = useState<Step>("dashboard");
   const [scanning, setScanning] = useState(false);
   const [scanned, setScanned] = useState(false);
@@ -43,18 +47,27 @@ export function DemoPanel() {
   const [queueProgress, setQueueProgress] = useState(0);
   const [queueRunning, setQueueRunning] = useState(false);
 
+  const products = useMemo(() => getDemoProducts(locale), [locale]);
+  const numberLocale = locale === "tr" ? "tr-TR" : "en-US";
+
+  const steps: { id: Step; label: string }[] = [
+    { id: "dashboard", label: copy.steps.dashboard },
+    { id: "products", label: copy.steps.products },
+    { id: "queue", label: copy.steps.queue },
+  ];
+
   const modalProduct = useMemo(
-    () => DEMO_PRODUCTS.find((p) => p.id === modalProductId) ?? null,
-    [modalProductId],
+    () => products.find((p) => p.id === modalProductId) ?? null,
+    [modalProductId, products],
   );
 
-  const avg = averageScore(DEMO_PRODUCTS);
-  const severity = countBySeverity(DEMO_PRODUCTS);
+  const avg = averageScore(products);
+  const severity = countBySeverity(products);
   const totalProducts = DEMO_STORES.reduce((n, s) => n + s.products, 0);
 
   const approvedIssues = useMemo(() => {
     const rows: { product: DemoProduct; issue: Issue }[] = [];
-    for (const product of DEMO_PRODUCTS) {
+    for (const product of products) {
       for (const issue of product.issues) {
         if (decisions[issue.id] === "approved") {
           rows.push({ product, issue });
@@ -62,7 +75,7 @@ export function DemoPanel() {
       }
     }
     return rows;
-  }, [decisions]);
+  }, [decisions, products]);
 
   useEffect(() => {
     if (!scanning) return;
@@ -112,6 +125,10 @@ export function DemoPanel() {
     setModalProductId(id);
   }
 
+  function kindLabel(kind: Issue["kind"]): string {
+    return copy.kind[kind];
+  }
+
   return (
     <div className="demo-shell grid-ledger min-h-screen">
       <div className="paper-vignette pointer-events-none absolute inset-0" />
@@ -119,25 +136,21 @@ export function DemoPanel() {
       <div className="demo-frame relative z-10 mx-auto max-w-5xl px-4 py-8 md:px-8 md:py-12">
         <header className="demo-topbar">
           <div>
-            <p className="demo-eyebrow">HAN · Panel demo</p>
-            <h1 className="font-serif demo-title">Product analysis mock</h1>
-            <p className="demo-lede">
-              Analyzes name, description, and photos — then proposes fixes.
-              Each suggestion opens before/after side-by-side and needs its own
-              approval.
-            </p>
+            <p className="demo-eyebrow">{copy.eyebrow}</p>
+            <h1 className="font-serif demo-title">{copy.title}</h1>
+            <p className="demo-lede">{copy.lede}</p>
           </div>
-          <Link href="/" className="demo-link">
-            ← Manifesto
+          <Link href={`/${locale}`} className="demo-link">
+            {copy.backToManifesto}
           </Link>
         </header>
 
-        <nav className="demo-steps" aria-label="Demo steps">
-          {STEPS.map((item, index) => {
+        <nav className="demo-steps" aria-label={copy.stepsAria}>
+          {steps.map((item, index) => {
             const active = step === item.id;
             const done =
-              STEPS.findIndex((s) => s.id === step) >
-              STEPS.findIndex((s) => s.id === item.id);
+              steps.findIndex((s) => s.id === step) >
+              steps.findIndex((s) => s.id === item.id);
             return (
               <button
                 key={item.id}
@@ -158,17 +171,17 @@ export function DemoPanel() {
           <section className="demo-panel">
             <div className="demo-metrics">
               <article className="demo-metric">
-                <p className="demo-metric__label">Products</p>
+                <p className="demo-metric__label">{copy.metrics.products}</p>
                 <p className="demo-metric__value font-serif">
-                  {totalProducts.toLocaleString("en-US")}
+                  {totalProducts.toLocaleString(numberLocale)}
                 </p>
               </article>
               <article className="demo-metric">
-                <p className="demo-metric__label">Avg UCP score</p>
+                <p className="demo-metric__label">{copy.metrics.avgScore}</p>
                 <p className="demo-metric__value font-serif">{avg}</p>
               </article>
               <article className="demo-metric">
-                <p className="demo-metric__label">Critical issues</p>
+                <p className="demo-metric__label">{copy.metrics.critical}</p>
                 <p className="demo-metric__value font-serif">
                   {severity.critical}
                 </p>
@@ -184,9 +197,11 @@ export function DemoPanel() {
                   </div>
                   <div className="demo-store__meta">
                     <span className={`demo-status demo-status--${store.status}`}>
-                      {store.status}
+                      {copy.status[store.status]}
                     </span>
-                    <span>{store.products.toLocaleString("en-US")} SKUs</span>
+                    <span>
+                      {store.products.toLocaleString(numberLocale)} {copy.skus}
+                    </span>
                   </div>
                 </article>
               ))}
@@ -200,10 +215,10 @@ export function DemoPanel() {
                 onClick={() => setScanning(true)}
               >
                 {scanning
-                  ? "Analyzing photos, names & copy…"
+                  ? copy.analyzing
                   : scanned
-                    ? "Run analysis again"
-                    : "Analyze products"}
+                    ? copy.analyzeAgain
+                    : copy.analyze}
               </button>
               {scanned && (
                 <button
@@ -211,14 +226,13 @@ export function DemoPanel() {
                   className="demo-btn"
                   onClick={() => setStep("products")}
                 >
-                  View results
+                  {copy.viewResults}
                 </button>
               )}
             </div>
             {scanning && (
               <p className="demo-hint" role="status">
-                Checking images, titles, and descriptions against UCP / SEO
-                rules…
+                {copy.scanningHint}
               </p>
             )}
           </section>
@@ -227,14 +241,11 @@ export function DemoPanel() {
         {step === "products" && (
           <section className="demo-panel">
             <div className="demo-panel__head">
-              <h2 className="font-serif">Analysis results</h2>
-              <p>
-                Open a product to review each suggestion in a popup — approve or
-                reject one by one.
-              </p>
+              <h2 className="font-serif">{copy.resultsTitle}</h2>
+              <p>{copy.resultsLede}</p>
             </div>
             <ul className="demo-product-list">
-              {[...DEMO_PRODUCTS]
+              {[...products]
                 .sort((a, b) => a.ucpScore - b.ucpScore)
                 .map((product) => {
                   const critical = product.issues.filter(
@@ -253,10 +264,11 @@ export function DemoPanel() {
                         <div>
                           <p className="demo-product__title">{product.title}</p>
                           <p className="demo-product__meta">
-                            {product.platform} · {product.imageCount} photos ·{" "}
-                            {product.issues.length} suggestions
+                            {product.platform} · {product.imageCount}{" "}
+                            {copy.photos} · {product.issues.length}{" "}
+                            {copy.suggestions}
                             {photoIssues > 0
-                              ? ` · ${photoIssues} photo`
+                              ? ` · ${photoIssues} ${copy.photoIssue}`
                               : ""}
                           </p>
                         </div>
@@ -266,7 +278,7 @@ export function DemoPanel() {
                           </span>
                           {critical > 0 && (
                             <span className={severityClass("critical")}>
-                              {critical} critical
+                              {critical} {copy.criticalCount}
                             </span>
                           )}
                         </div>
@@ -282,7 +294,7 @@ export function DemoPanel() {
                 disabled={approvedIssues.length === 0}
                 onClick={() => setStep("queue")}
               >
-                Review apply queue ({approvedIssues.length})
+                {copy.reviewQueue} ({approvedIssues.length})
               </button>
             </div>
           </section>
@@ -291,18 +303,12 @@ export function DemoPanel() {
         {step === "queue" && (
           <section className="demo-panel">
             <div className="demo-panel__head">
-              <h2 className="font-serif">Chunked apply</h2>
-              <p>
-                Only individually approved suggestions enter the queue — then
-                apply in small rate-limited batches.
-              </p>
+              <h2 className="font-serif">{copy.queueTitle}</h2>
+              <p>{copy.queueLede}</p>
             </div>
 
             {approvedIssues.length === 0 ? (
-              <p className="demo-hint">
-                Nothing approved yet. Open a product popup and approve suggestions
-                one by one.
-              </p>
+              <p className="demo-hint">{copy.queueEmpty}</p>
             ) : (
               <>
                 <ul className="demo-queue-list">
@@ -310,7 +316,7 @@ export function DemoPanel() {
                     <li key={issue.id} className="demo-queue-item">
                       <span className="font-serif">{product.title}</span>
                       <span>
-                        {kindLabel(issue.kind)} · {issue.severity}
+                        {kindLabel(issue.kind)} · {copy.severity[issue.severity]}
                       </span>
                     </li>
                   ))}
@@ -324,10 +330,10 @@ export function DemoPanel() {
                 </div>
                 <p className="demo-hint" role="status">
                   {queueRunning
-                    ? `Applying batch… ${queueProgress}%`
+                    ? `${copy.applying} ${queueProgress}%`
                     : queueProgress >= 100
-                      ? "Demo complete — each write logged; rollback snapshot kept."
-                      : "Ready to simulate apply."}
+                      ? copy.queueDone
+                      : copy.queueReady}
                 </p>
 
                 <div className="demo-actions">
@@ -337,14 +343,14 @@ export function DemoPanel() {
                     disabled={queueRunning || queueProgress >= 100}
                     onClick={() => setQueueRunning(true)}
                   >
-                    {queueProgress >= 100 ? "Applied" : "Apply gradually"}
+                    {queueProgress >= 100 ? copy.applied : copy.apply}
                   </button>
                   <button
                     type="button"
                     className="demo-btn"
                     onClick={() => setStep("products")}
                   >
-                    Back to products
+                    {copy.backToProducts}
                   </button>
                 </div>
               </>
@@ -369,13 +375,16 @@ export function DemoPanel() {
           >
             <header className="demo-modal__header">
               <div>
-                <p className="demo-eyebrow">Suggestion review</p>
+                <p className="demo-eyebrow">{copy.modalEyebrow}</p>
                 <h2 id="demo-modal-title" className="font-serif demo-modal__title">
                   {modalProduct.title}
                 </h2>
                 <p className="demo-modal__meta">
-                  Score {modalProduct.ucpScore}/100 · {modalProduct.platform} ·{" "}
-                  {modalProduct.imageCount} photos analyzed
+                  {fill(copy.scoreMeta, {
+                    score: modalProduct.ucpScore,
+                    platform: modalProduct.platform,
+                    photos: modalProduct.imageCount,
+                  })}
                 </p>
               </div>
               <button
@@ -383,7 +392,7 @@ export function DemoPanel() {
                 className="demo-btn"
                 onClick={() => setModalProductId(null)}
               >
-                Close
+                {copy.close}
               </button>
             </header>
 
@@ -394,17 +403,17 @@ export function DemoPanel() {
                   <article key={issue.id} className="demo-issue demo-issue--modal">
                     <div className="demo-issue__top">
                       <span className={severityClass(issue.severity)}>
-                        {issue.severity}
+                        {copy.severity[issue.severity]}
                       </span>
                       <span className="demo-issue__field">
                         {kindLabel(issue.kind)}
                       </span>
                       <span className="demo-issue__status">
                         {decision === "pending"
-                          ? "Needs approval"
+                          ? copy.needsApproval
                           : decision === "approved"
-                            ? "Approved"
-                            : "Rejected"}
+                            ? copy.approved
+                            : copy.rejected}
                       </span>
                     </div>
                     <p className="demo-issue__problem">{issue.problem}</p>
@@ -412,10 +421,10 @@ export function DemoPanel() {
 
                     <div className="demo-compare">
                       <div className="demo-compare__col">
-                        <p className="demo-diff__label">Before</p>
+                        <p className="demo-diff__label">{copy.before}</p>
                         {issue.kind === "image" ? (
                           <div className="demo-photo demo-photo--before">
-                            <span>{issue.beforeVisual ?? "Before"}</span>
+                            <span>{issue.beforeVisual ?? copy.before}</span>
                             <small>{issue.before}</small>
                           </div>
                         ) : (
@@ -423,10 +432,10 @@ export function DemoPanel() {
                         )}
                       </div>
                       <div className="demo-compare__col">
-                        <p className="demo-diff__label">After</p>
+                        <p className="demo-diff__label">{copy.after}</p>
                         {issue.kind === "image" ? (
                           <div className="demo-photo demo-photo--after">
-                            <span>{issue.afterVisual ?? "After"}</span>
+                            <span>{issue.afterVisual ?? copy.after}</span>
                             <small>{issue.after}</small>
                           </div>
                         ) : (
@@ -443,14 +452,14 @@ export function DemoPanel() {
                         className={`demo-btn ${decision === "approved" ? "demo-btn--primary" : ""}`}
                         onClick={() => setDecision(issue.id, "approved")}
                       >
-                        Approve this fix
+                        {copy.approveFix}
                       </button>
                       <button
                         type="button"
                         className={`demo-btn ${decision === "rejected" ? "is-muted-active" : ""}`}
                         onClick={() => setDecision(issue.id, "rejected")}
                       >
-                        Reject
+                        {copy.reject}
                       </button>
                     </div>
                   </article>
@@ -459,10 +468,7 @@ export function DemoPanel() {
             </div>
 
             <footer className="demo-modal__footer">
-              <p className="demo-hint">
-                Approvals are per suggestion — nothing writes back until you send
-                the queue.
-              </p>
+              <p className="demo-hint">{copy.modalFooter}</p>
               <button
                 type="button"
                 className="demo-btn demo-btn--primary"
@@ -476,7 +482,7 @@ export function DemoPanel() {
                   setStep("queue");
                 }}
               >
-                Go to apply queue
+                {copy.goToQueue}
               </button>
             </footer>
           </div>

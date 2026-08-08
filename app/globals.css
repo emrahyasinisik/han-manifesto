@@ -14,6 +14,50 @@ body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
+.locale-switcher {
+  position: fixed;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--color-ink);
+  background: color-mix(in srgb, var(--color-paper) 92%, white);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+
+.locale-switcher__btn {
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.locale-switcher__btn:hover {
+  color: var(--color-ink);
+}
+
+.locale-switcher__btn.is-active {
+  color: var(--color-amber);
+}
+
+.locale-switcher__sep {
+  color: var(--color-grid);
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .locale-switcher {
+    top: 1.15rem;
+    right: 1.25rem;
+  }
+}
+
 .grid-ledger {
   background-color: var(--color-paper);
   background-image:

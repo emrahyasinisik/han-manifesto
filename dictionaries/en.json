@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "title": "HAN Manifesto",
+    "description": "Hub for Agent Networks — principles for a shared language of commerce data for agents.",
+    "demoTitle": "HAN Panel Demo",
+    "demoDescription": "Interactive mock of the HAN panel — scan marketplaces, review UCP issues, approve AI suggestions."
+  },
+  "localeSwitcher": {
+    "label": "Language",
+    "en": "EN",
+    "tr": "TR"
+  },
+  "manifesto": {
+    "viewDemo": "View panel demo"
+  },
+  "demo": {
+    "eyebrow": "HAN · Panel demo",
+    "title": "Product analysis mock",
+    "lede": "Analyzes name, description, and photos — then proposes fixes. Each suggestion opens before/after side-by-side and needs its own approval.",
+    "backToManifesto": "← Manifesto",
+    "stepsAria": "Demo steps",
+    "steps": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "queue": "Apply"
+    },
+    "metrics": {
+      "products": "Products",
+      "avgScore": "Avg UCP score",
+      "critical": "Critical issues"
+    },
+    "status": {
+      "connected": "connected",
+      "syncing": "syncing",
+      "error": "error"
+    },
+    "skus": "SKUs",
+    "analyze": "Analyze products",
+    "analyzing": "Analyzing photos, names & copy…",
+    "analyzeAgain": "Run analysis again",
+    "viewResults": "View results",
+    "scanningHint": "Checking images, titles, and descriptions against UCP / SEO rules…",
+    "resultsTitle": "Analysis results",
+    "resultsLede": "Open a product to review each suggestion in a popup — approve or reject one by one.",
+    "photos": "photos",
+    "suggestions": "suggestions",
+    "photoIssue": "photo",
+    "criticalCount": "critical",
+    "reviewQueue": "Review apply queue",
+    "queueTitle": "Chunked apply",
+    "queueLede": "Only individually approved suggestions enter the queue — then apply in small rate-limited batches.",
+    "queueEmpty": "Nothing approved yet. Open a product popup and approve suggestions one by one.",
+    "applying": "Applying batch…",
+    "queueDone": "Demo complete — each write logged; rollback snapshot kept.",
+    "queueReady": "Ready to simulate apply.",
+    "apply": "Apply gradually",
+    "applied": "Applied",
+    "backToProducts": "Back to products",
+    "modalEyebrow": "Suggestion review",
+    "scoreMeta": "Score {score}/100 · {platform} · {photos} photos analyzed",
+    "close": "Close",
+    "kind": {
+      "title": "Name",
+      "description": "Description",
+      "image": "Photos",
+      "attribute": "Attributes"
+    },
+    "severity": {
+      "critical": "critical",
+      "medium": "medium",
+      "low": "low"
+    },
+    "needsApproval": "Needs approval",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "before": "Before",
+    "after": "After",
+    "approveFix": "Approve this fix",
+    "reject": "Reject",
+    "modalFooter": "Approvals are per suggestion — nothing writes back until you send the queue.",
+    "goToQueue": "Go to apply queue"
+  }
+}

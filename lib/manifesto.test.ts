@@ -47,6 +47,15 @@ Normalize via connectors; write analysis once.
     expect(doc.commitmentHtml).toBe("");
   });
 
+  it("loads locale markdown files from content/", async () => {
+    const en = await loadManifesto("en");
+    const tr = await loadManifesto("tr");
+    expect(en.frontmatter.title).toMatch(/Commerce data/i);
+    expect(tr.frontmatter.title).toMatch(/Ticaret verisi/i);
+    expect(en.sections.length).toBeGreaterThan(0);
+    expect(tr.sections.length).toBe(en.sections.length);
+  });
+
   it("treats optional Commitment / Taahhüt as commitmentHtml, not a numbered section", async () => {
     const dir = mkdtempSync(join(tmpdir(), "han-manifesto-"));
     dirs.push(dir);
