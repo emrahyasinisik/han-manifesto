@@ -8,6 +8,8 @@ import type { Locale } from "@/lib/i18n";
 export type ManifestoFrontmatter = {
   brand: string;
   subline: string;
+  /** ISO date (YYYY-MM-DD) when the manifesto was published. */
+  date: string;
   title: string;
   intro: string;
 };
@@ -26,6 +28,19 @@ export type ManifestoDoc = {
 };
 
 const COMMITMENT_TITLES = new Set(["Commitment", "Taahhüt"]);
+
+function normalizeManifestoDate(value: unknown): string {
+  if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value.trim())) {
+    return value.trim();
+  }
+  // gray-matter/js-yaml may parse bare YYYY-MM-DD as a Date
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10);
+  }
+  throw new Error(
+    `manifesto frontmatter date must be YYYY-MM-DD, got: ${String(value)}`,
+  );
+}
 
 async function mdToHtml(markdown: string): Promise<string> {
   const result = await remark().use(html).process(markdown);
@@ -55,9 +70,14 @@ export async function loadManifesto(
       : localeOrPath;
   const raw = await readFile(filePath, "utf8");
   const { data, content } = matter(raw);
-  const frontmatter = data as ManifestoFrontmatter;
+  const frontmatter = {
+    ...(data as Omit<ManifestoFrontmatter, "date"> & { date?: unknown }),
+    date: normalizeManifestoDate(
+      (data as { date?: unknown }).date,
+    ),
+  } satisfies ManifestoFrontmatter;
 
-  for (const key of ["brand", "subline", "title", "intro"] as const) {
+  for (const key of ["brand", "subline", "date", "title", "intro"] as const) {
     if (typeof frontmatter[key] !== "string" || !frontmatter[key].trim()) {
       throw new Error(`manifesto frontmatter missing string: ${key}`);
     }

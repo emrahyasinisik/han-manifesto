@@ -12,5 +12,5 @@ export default async function HomePage({
   if (!isLocale(locale)) notFound();
 
   const doc = await loadManifesto(locale);
-  return <ManifestoExperience doc={doc} />;
+  return <ManifestoExperience doc={doc} locale={locale} />;
 }

@@ -1,6 +1,7 @@
 ---
 brand: HAN
 subline: Hub for Agent Networks
+date: "2026-08-08"
 title: Commerce data should speak one language to agents.
 intro: HAN states the principles for reducing marketplace data to a shared schema—and building trustworthy intelligence above it. Not a sales pitch; a commitment to how we build.
 ---

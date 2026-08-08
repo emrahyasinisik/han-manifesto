@@ -19,6 +19,7 @@ describe("loadManifesto", () => {
       `---
 brand: HAN
 subline: Hub for Agent Networks
+date: 2026-08-08
 title: Commerce data should speak one language to agents.
 intro: Without a shared schema, agents relearn every marketplace.
 ---
@@ -38,6 +39,7 @@ Normalize via connectors; write analysis once.
 
     expect(doc.frontmatter.brand).toBe("HAN");
     expect(doc.frontmatter.subline).toBe("Hub for Agent Networks");
+    expect(doc.frontmatter.date).toBe("2026-08-08");
     expect(doc.sections).toHaveLength(2);
     expect(doc.sections[0]).toMatchObject({
       index: "01",
@@ -52,6 +54,8 @@ Normalize via connectors; write analysis once.
     const tr = await loadManifesto("tr");
     expect(en.frontmatter.title).toMatch(/Commerce data/i);
     expect(tr.frontmatter.title).toMatch(/Ticaret verisi/i);
+    expect(en.frontmatter.date).toBe("2026-08-08");
+    expect(tr.frontmatter.date).toBe(en.frontmatter.date);
     expect(en.sections.length).toBeGreaterThan(0);
     expect(tr.sections.length).toBe(en.sections.length);
   });
@@ -64,6 +68,7 @@ Normalize via connectors; write analysis once.
       `---
 brand: HAN
 subline: Hub for Agent Networks
+date: 2026-08-08
 title: Title
 intro: Intro
 ---

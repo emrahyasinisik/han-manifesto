@@ -1,6 +1,7 @@
 ---
 brand: HAN
 subline: Hub for Agent Networks
+date: "2026-08-08"
 title: Ticaret verisi ajanlar için ortak bir dil konuşmalı.
 intro: HAN, pazaryeri verisini ortak bir şemaya indirgeyip üstünde güvenilir zekâ kurmanın ilkelerini ortaya koyar. Satış vaadi değil; nasıl inşa edeceğimizin taahhüdü.
 ---
