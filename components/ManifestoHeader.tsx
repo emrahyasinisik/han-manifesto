@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type Props = {
   brand: string;
   subline: string;
@@ -19,9 +21,14 @@ export function ManifestoHeader({ brand, subline, title, intro }: Props) {
       <p className="hero-stagger hero-stagger-3 mt-5 max-w-2xl text-base leading-relaxed text-[var(--color-muted)] md:mt-7 md:text-lg">
         {intro}
       </p>
+      <p className="hero-stagger hero-stagger-4 mt-6">
+        <Link href="/demo" className="manifesto-demo-link">
+          View panel demo
+        </Link>
+      </p>
       <div
         aria-hidden
-        className="hero-stagger hero-stagger-4 mt-10 h-px max-w-xs bg-gradient-to-r from-[var(--color-amber)] via-[var(--color-grid)] to-transparent"
+        className="hero-stagger hero-stagger-5 mt-10 h-px max-w-xs bg-gradient-to-r from-[var(--color-amber)] via-[var(--color-grid)] to-transparent"
       />
     </header>
   );
