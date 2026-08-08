@@ -54,6 +54,64 @@ body {
   mask-image: radial-gradient(circle at center, black 20%, transparent 72%);
 }
 
+/* Scroll-linked cable network → HAN */
+.scroll-cables {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.42;
+}
+
+@media (min-width: 768px) {
+  .scroll-cables {
+    opacity: 0.62;
+  }
+}
+
+@media (min-width: 1024px) {
+  .scroll-cables {
+    opacity: 0.72;
+  }
+}
+
+.scroll-cables__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.scroll-cables__han {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: clamp(5.5rem, 22vw, 14rem);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+  color: var(--color-ink);
+  user-select: none;
+  mix-blend-mode: multiply;
+}
+
+.scroll-cables--static .scroll-cables__han {
+  opacity: 0.08;
+  color: color-mix(in srgb, var(--color-amber) 55%, var(--color-ink));
+}
+
+.scroll-cables:not(.scroll-cables--static) .scroll-cables__han {
+  color: color-mix(in srgb, var(--color-amber) 40%, var(--color-ink));
+}
+
+.scroll-cables[data-stroke-ready="false"] .scroll-cables__strand {
+  opacity: 0;
+}
+
 .font-serif {
   font-family: var(--font-serif), Georgia, "Times New Roman", serif;
 }
