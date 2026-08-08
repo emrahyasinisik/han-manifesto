@@ -440,24 +440,6 @@ body {
   animation-delay: 0.48s;
 }
 
-.manifesto-demo-link {
-  display: inline-block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: var(--color-amber);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-amber) 45%, transparent);
-  padding-bottom: 0.15rem;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-
-.manifesto-demo-link:hover {
-  color: var(--color-ink);
-  border-color: var(--color-ink);
-}
-
 /* —— Panel demo —— */
 .demo-shell {
   position: relative;

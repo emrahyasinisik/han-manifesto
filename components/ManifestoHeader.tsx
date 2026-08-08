@@ -1,23 +1,11 @@
-import Link from "next/link";
-import type { Locale } from "@/lib/i18n";
-
 type Props = {
   brand: string;
   subline: string;
   title: string;
   intro: string;
-  locale: Locale;
-  viewDemoLabel: string;
 };
 
-export function ManifestoHeader({
-  brand,
-  subline,
-  title,
-  intro,
-  locale,
-  viewDemoLabel,
-}: Props) {
+export function ManifestoHeader({ brand, subline, title, intro }: Props) {
   return (
     <header className="mb-14 md:mb-20">
       <p className="hero-stagger hero-stagger-1 mb-4 max-w-full text-xs font-semibold uppercase leading-relaxed tracking-[0.12em] text-[var(--color-amber)] md:tracking-[0.18em]">
@@ -31,14 +19,9 @@ export function ManifestoHeader({
       <p className="hero-stagger hero-stagger-3 mt-5 max-w-2xl text-base leading-relaxed text-[var(--color-muted)] md:mt-7 md:text-lg">
         {intro}
       </p>
-      <p className="hero-stagger hero-stagger-4 mt-6">
-        <Link href={`/${locale}/demo`} className="manifesto-demo-link">
-          {viewDemoLabel}
-        </Link>
-      </p>
       <div
         aria-hidden
-        className="hero-stagger hero-stagger-5 mt-10 h-px max-w-xs bg-gradient-to-r from-[var(--color-amber)] via-[var(--color-grid)] to-transparent"
+        className="hero-stagger hero-stagger-4 mt-10 h-px max-w-xs bg-gradient-to-r from-[var(--color-amber)] via-[var(--color-grid)] to-transparent"
       />
     </header>
   );
