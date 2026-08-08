@@ -5,7 +5,6 @@ import type { ManifestoDoc } from "@/lib/manifesto";
 import { ManifestoCommitment } from "@/components/ManifestoCommitment";
 import { ManifestoHeader } from "@/components/ManifestoHeader";
 import { ManifestoSection } from "@/components/ManifestoSection";
-import { Reveal } from "@/components/Reveal";
 
 const AmbientNetwork = dynamic(
   () =>
@@ -23,20 +22,16 @@ export function ManifestoExperience({ doc }: Props) {
       <div className="paper-vignette pointer-events-none absolute inset-0 z-[1]" />
       <AmbientNetwork />
 
-      <div className="relative z-10 mx-auto max-w-3xl px-6 py-16 md:px-8 md:py-24 lg:py-28">
+      <div className="relative z-10 mx-auto max-w-3xl px-6 py-16 md:max-w-4xl md:px-8 md:py-24 lg:py-28">
         <ManifestoHeader {...doc.frontmatter} />
 
-        <div className="mt-4 space-y-0">
-          {doc.sections.map((section, index) => (
-            <Reveal key={section.index} delayMs={Math.min(index * 40, 160)}>
-              <ManifestoSection {...section} />
-            </Reveal>
+        <div className="manifesto-sections mt-2 md:mt-4">
+          {doc.sections.map((section) => (
+            <ManifestoSection key={section.index} {...section} />
           ))}
         </div>
 
-        <Reveal delayMs={80}>
-          <ManifestoCommitment html={doc.commitmentHtml} />
-        </Reveal>
+        <ManifestoCommitment html={doc.commitmentHtml} />
       </div>
     </main>
   );

@@ -11,7 +11,7 @@ describe("loadManifesto", () => {
     for (const d of dirs) rmSync(d, { recursive: true, force: true });
   });
 
-  it("parses frontmatter, numbered sections, and Taahhüt", async () => {
+  it("parses frontmatter, numbered sections, and Commitment", async () => {
     const dir = mkdtempSync(join(tmpdir(), "han-manifesto-"));
     dirs.push(dir);
     writeFileSync(
@@ -19,21 +19,21 @@ describe("loadManifesto", () => {
       `---
 brand: HAN
 subline: Hub for Agent Networks
-title: Ticaret verisi ajanlar için ortak bir dil konuşmalı.
-intro: Ortak şema olmadan ajanlar ve paneller her pazaryerini yeniden öğrenir.
+title: Commerce data should speak one language to agents.
+intro: Without a shared schema, agents relearn every marketplace.
 ---
 
-## UCP nedir, ne değildir
+## What UCP is — and is not
 
-UCP ortak şemadır; analiz motoru değildir.
+UCP is the shared schema; it is not an analysis engine.
 
-## Tek çatı ilkesi
+## One roof
 
-Connector ile normalize et, analizi bir kez yaz.
+Normalize via connectors; write analysis once.
 
-## Taahhüt
+## Commitment
 
-Ortak dil. Üst katmanda zekâ. Onay olmadan yazma.
+Shared language. Intelligence above. No write without approval.
 `,
       "utf8",
     );
@@ -45,9 +45,9 @@ Ortak dil. Üst katmanda zekâ. Onay olmadan yazma.
     expect(doc.sections).toHaveLength(2);
     expect(doc.sections[0]).toMatchObject({
       index: "01",
-      title: "UCP nedir, ne değildir",
+      title: "What UCP is — and is not",
     });
-    expect(doc.sections[0].html).toContain("ortak şema");
-    expect(doc.commitmentHtml).toContain("Onay olmadan yazma");
+    expect(doc.sections[0].html).toContain("shared schema");
+    expect(doc.commitmentHtml).toContain("No write without approval");
   });
 });

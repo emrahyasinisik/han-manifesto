@@ -87,16 +87,65 @@ body {
 
 .reveal {
   opacity: 0;
-  transform: translateY(22px);
+  transform: translateY(36px) scale(0.985);
+  filter: blur(5px);
+  clip-path: inset(10% 0 14% 0);
   transition:
-    opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, transform;
+    opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.05s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.75s ease,
+    clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, clip-path, filter;
 }
 
 .reveal-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  clip-path: inset(0 0 0 0);
+}
+
+.reveal .ms-index,
+.reveal .ms-title,
+.reveal .ms-body,
+.reveal .ms-label,
+.reveal .ms-rule {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal .ms-rule {
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.reveal-visible .ms-index {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.1s;
+}
+
+.reveal-visible .ms-title,
+.reveal-visible .ms-label {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.22s;
+}
+
+.reveal-visible .ms-body {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.34s;
+}
+
+.reveal-visible .ms-rule {
+  opacity: 1;
+  transform: scaleY(1);
+  transition-delay: 0.18s;
+  transition-duration: 0.9s;
 }
 
 @keyframes hero-in {
@@ -133,6 +182,18 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+    transition: none;
+  }
+
+  .reveal .ms-index,
+  .reveal .ms-title,
+  .reveal .ms-body,
+  .reveal .ms-label,
+  .reveal .ms-rule {
     opacity: 1;
     transform: none;
     transition: none;

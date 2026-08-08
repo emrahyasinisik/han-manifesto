@@ -18,14 +18,14 @@ const sans = IBM_Plex_Sans({
 export const metadata: Metadata = {
   title: "HAN Manifesto",
   description:
-    "Hub for Agent Networks — ticaret verisinin ajanlar için ortak dili üzerine ilkeler.",
+    "Hub for Agent Networks — principles for a shared language of commerce data for agents.",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="tr" className={`${serif.variable} ${sans.variable}`}>
+    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <body className="min-h-screen antialiased">{children}</body>
     </html>
   );

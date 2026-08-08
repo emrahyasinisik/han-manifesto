@@ -2,16 +2,14 @@ type Props = { html: string };
 
 export function ManifestoCommitment({ html }: Props) {
   return (
-    <footer className="relative mt-10 border-t-2 border-[var(--color-ink)] py-14 md:mt-12 md:py-20">
+    <footer className="manifesto-commitment relative">
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-6 top-10 h-24 w-24 rounded-full bg-[var(--color-amber)]/10 blur-2xl md:-left-10"
+        className="pointer-events-none absolute -left-6 top-12 h-28 w-28 rounded-full bg-[var(--color-amber)]/10 blur-2xl md:-left-10"
       />
-      <p className="mb-6 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--color-amber)] md:tracking-[0.18em]">
-        Taahhüt
-      </p>
+      <p className="ms-label manifesto-commitment__label">Commitment</p>
       <div
-        className="prose-manifesto prose-manifesto-commitment relative font-serif text-xl leading-relaxed text-[var(--color-ink)] md:text-2xl"
+        className="ms-body prose-manifesto prose-manifesto-commitment manifesto-commitment__body font-serif"
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </footer>

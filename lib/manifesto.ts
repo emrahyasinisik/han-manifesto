@@ -23,6 +23,8 @@ export type ManifestoDoc = {
   commitmentHtml: string;
 };
 
+const COMMITMENT_TITLES = new Set(["Commitment", "Taahhüt"]);
+
 async function mdToHtml(markdown: string): Promise<string> {
   const result = await remark().use(html).process(markdown);
   return String(result);
@@ -57,7 +59,7 @@ export async function loadManifesto(
 
   for (const chunk of chunks) {
     const rendered = await mdToHtml(chunk.body);
-    if (chunk.title === "Taahhüt") {
+    if (COMMITMENT_TITLES.has(chunk.title)) {
       commitmentHtml = rendered;
       continue;
     }
@@ -66,7 +68,9 @@ export async function loadManifesto(
   }
 
   if (!commitmentHtml) {
-    throw new Error('manifesto.md must include a "## Taahhüt" section');
+    throw new Error(
+      'manifesto.md must include a "## Commitment" (or "## Taahhüt") section',
+    );
   }
 
   return { frontmatter, sections, commitmentHtml };

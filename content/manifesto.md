@@ -1,68 +1,68 @@
 ---
 brand: HAN
 subline: Hub for Agent Networks
-title: Ticaret verisi ajanlar için ortak bir dil konuşmalı.
-intro: HAN, pazaryeri verisini ortak bir şemaya indirgeyip üstünde güvenilir zekâ kurmanın ilkelerini ortaya koyar. Satış vaadi değil; nasıl inşa edeceğimizin taahhüdü.
+title: Commerce data should speak one language to agents.
+intro: HAN states the principles for reducing marketplace data to a shared schema—and building trustworthy intelligence above it. Not a sales pitch; a commitment to how we build.
 ---
 
-## UCP nedir, ne değildir
+## What UCP is — and is not
 
-**UCP ortak şemadır.** Katalog, sipariş ve kimlik bağlama için ajanların ve sistemlerin konuşabileceği canonical biçimler sunar.
+**UCP is the shared schema.** It offers canonical shapes so agents and systems can speak about catalogs, orders, and identity binding.
 
-**UCP analiz motoru değildir.** SEO skoru, öneri metni veya kâr-zarar hesabı protokolün işi değildir; bunlar bizim katmanımızda yaşar.
+**UCP is not an analysis engine.** SEO scores, recommendation copy, and profit-and-loss math are not the protocol’s job—they live in our layer.
 
-Bu ayrım bozulursa mimari çürür: her pazaryeri için yeniden “zeka” yazmaya başlarız.
+Blur that line and the architecture rots: we rewrite “intelligence” for every marketplace.
 
-## Tek çatı ilkesi
+## One roof
 
-Her pazaryeri bir **connector** ile gelir: ham veriyi çeker, yorumlamaz.
+Each marketplace arrives as a **connector**: it fetches raw data and does not interpret it.
 
-Connector çıktısı **UCP normalizasyon** ile tek dile çevrilir.
+Connector output becomes one language through **UCP normalization**.
 
-Analiz bir kez yazılır. Yeni bir pazaryeri eklemek, üst katmanları yeniden yazmak demek değildir.
+Analysis is written once. Adding a marketplace must not mean rewriting the layers above.
 
-## Zekâ üst katmanda
+## Intelligence above the schema
 
-Skor, SEO sinyalleri ve öneriler normalize verinin üzerinde çalışır.
+Scores, SEO signals, and recommendations run on normalized data.
 
-**Kural önce gelir** — ölçüm tekrarlanabilir ve denetlenebilir kalır.
+**Rules come first** — measurement stays repeatable and auditable.
 
-**LLM ikincildir** — yalnızca bulanık işlerde (yeniden yazım, anahtar kelime çıkarımı) devreye girer; skoru gizlice değiştirmez.
+**LLMs are secondary** — they enter only for fuzzy work (rewrites, keyword extraction); they never silently rewrite the score.
 
-Metrik, skor ve karar/öneri birbirine karıştırılmaz.
+Metric, score, and decision/recommendation stay separate.
 
-## Agent-ready katalog
+## Agent-ready catalog
 
-Ürün feed’i yalnızca vitrin için değildir; Google, ChatGPT, Perplexity ve benzeri ajanlar için de okunabilir olmalıdır.
+A product feed is not only for storefronts. It must be readable by Google, ChatGPT, Perplexity, and similar agents.
 
-Eksik alan, şişirilmiş başlık, tekraren içerik ve zayıf nitelikler ajan keşfini ve güveni düşürür.
+Missing fields, stuffed titles, duplicated copy, and thin attributes weaken discovery and trust.
 
-Uyum, “güzel görünmek” değil; **ajanların doğru anlaması**dır.
+Compliance is not “looking good.” It is **agents understanding correctly**.
 
-## İnsan onayı
+## Human approval
 
-Öneri üretmek yetmez. Platforma geri yazmadan önce insan onayı gerekir.
+Generating a suggestion is not enough. Human approval is required before writing back to a platform.
 
-Onay, güven içindir; aynı zamanda modelin öğreneceği geri bildirimdir.
+Approval protects trust—and produces the feedback the model learns from.
 
-Tam otomatik düzeltme, hesap riskini ve hatalı yayını kullanıcıya yükler — bunu reddederiz.
+Fully automatic fixes dump account risk and bad publishes onto the merchant. We refuse that.
 
-## Güvenli otomasyon
+## Safe automation
 
-Onaylanan değişiklikler tek patlamada değil, **parça parça** ve rate-limit’e saygılı uygulanır.
+Approved changes ship in **chunks**, with respect for rate limits—not in one burst.
 
-İsteklere jitter eklenir; kuyruk bir üründe düşse bile durmaz; her deneme audit log’a yazılır.
+Requests carry jitter; a single product failure does not stop the queue; every attempt is audited.
 
-Güncelleme öncesi eski veri saklanır — **rollback** bir lüks değil, güvenlik ağıdır.
+Previous state is kept before an update—**rollback** is a safety net, not a luxury.
 
-## Taahhüt
+## Commitment
 
-Ortak şemaya map et.
+Map to the shared schema.
 
-Zekâyı üst katmanda tut.
+Keep intelligence in the upper layer.
 
-Kuralı önce, modeli sonra çağır.
+Call rules first, models second.
 
-Onaysız yazma.
+Never write without approval.
 
-Ajanlar için okunur katalog bırak.
+Leave a catalog agents can read.
