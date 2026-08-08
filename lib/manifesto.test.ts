@@ -11,7 +11,7 @@ describe("loadManifesto", () => {
     for (const d of dirs) rmSync(d, { recursive: true, force: true });
   });
 
-  it("parses frontmatter, numbered sections, and Commitment", async () => {
+  it("parses frontmatter and numbered sections without requiring Commitment", async () => {
     const dir = mkdtempSync(join(tmpdir(), "han-manifesto-"));
     dirs.push(dir);
     writeFileSync(
@@ -30,10 +30,6 @@ UCP is the shared schema; it is not an analysis engine.
 ## One roof
 
 Normalize via connectors; write analysis once.
-
-## Commitment
-
-Shared language. Intelligence above. No write without approval.
 `,
       "utf8",
     );
@@ -48,10 +44,10 @@ Shared language. Intelligence above. No write without approval.
       title: "What UCP is — and is not",
     });
     expect(doc.sections[0].html).toContain("shared schema");
-    expect(doc.commitmentHtml).toContain("No write without approval");
+    expect(doc.commitmentHtml).toBe("");
   });
 
-  it("still accepts legacy Taahhüt commitment heading", async () => {
+  it("treats optional Commitment / Taahhüt as commitmentHtml, not a numbered section", async () => {
     const dir = mkdtempSync(join(tmpdir(), "han-manifesto-"));
     dirs.push(dir);
     writeFileSync(
@@ -67,15 +63,15 @@ intro: Intro
 
 Body.
 
-## Taahhüt
+## Commitment
 
-Legacy commitment line.
+Optional closing line.
 `,
       "utf8",
     );
 
     const doc = await loadManifesto(join(dir, "manifesto.md"));
     expect(doc.sections).toHaveLength(1);
-    expect(doc.commitmentHtml).toContain("Legacy commitment line");
+    expect(doc.commitmentHtml).toContain("Optional closing line");
   });
 });

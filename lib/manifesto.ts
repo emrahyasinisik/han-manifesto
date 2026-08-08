@@ -20,6 +20,7 @@ export type ManifestoSection = {
 export type ManifestoDoc = {
   frontmatter: ManifestoFrontmatter;
   sections: ManifestoSection[];
+  /** Present only when manifesto.md includes ## Commitment / ## Taahhüt. */
   commitmentHtml: string;
 };
 
@@ -65,12 +66,6 @@ export async function loadManifesto(
     }
     const index = String(sections.length + 1).padStart(2, "0");
     sections.push({ index, title: chunk.title, html: rendered });
-  }
-
-  if (!commitmentHtml) {
-    throw new Error(
-      'manifesto.md must include a "## Commitment" (or "## Taahhüt") section',
-    );
   }
 
   return { frontmatter, sections, commitmentHtml };

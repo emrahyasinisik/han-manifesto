@@ -54,15 +54,3 @@ Approved changes ship in **chunks**, with respect for rate limits—not in one b
 Requests carry jitter; a single product failure does not stop the queue; every attempt is audited.
 
 Previous state is kept before an update—**rollback** is a safety net, not a luxury.
-
-## Commitment
-
-Map to the shared schema.
-
-Keep intelligence in the upper layer.
-
-Call rules first, models second.
-
-Never write without approval.
-
-Leave a catalog agents can read.

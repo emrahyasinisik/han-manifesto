@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import type { ManifestoDoc } from "@/lib/manifesto";
-import { ManifestoCommitment } from "@/components/ManifestoCommitment";
 import { ManifestoHeader } from "@/components/ManifestoHeader";
 import { ManifestoSection } from "@/components/ManifestoSection";
 import { Reveal } from "@/components/Reveal";
@@ -33,10 +32,6 @@ export function ManifestoExperience({ doc }: Props) {
             </Reveal>
           ))}
         </div>
-
-        <Reveal delayMs={100}>
-          <ManifestoCommitment html={doc.commitmentHtml} />
-        </Reveal>
       </div>
     </main>
   );
