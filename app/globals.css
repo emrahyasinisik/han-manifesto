@@ -19,7 +19,39 @@ body {
   background-image:
     linear-gradient(var(--color-grid) 1px, transparent 1px),
     linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-size: 28px 28px;
+  background-position: center top;
+}
+
+.paper-vignette {
+  background:
+    radial-gradient(
+      120% 80% at 100% 0%,
+      rgba(180, 83, 9, 0.07),
+      transparent 55%
+    ),
+    radial-gradient(
+      90% 60% at 0% 100%,
+      rgba(17, 17, 17, 0.04),
+      transparent 50%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(250, 250, 248, 0.2),
+      rgba(250, 250, 248, 0.88) 45%,
+      var(--color-paper) 100%
+    );
+}
+
+.ambient-network-fallback {
+  background:
+    radial-gradient(
+      circle at 55% 45%,
+      rgba(180, 83, 9, 0.18),
+      transparent 42%
+    ),
+    radial-gradient(circle at 40% 60%, rgba(17, 17, 17, 0.08), transparent 50%);
+  mask-image: radial-gradient(circle at center, black 20%, transparent 72%);
 }
 
 .font-serif {
@@ -28,24 +60,24 @@ body {
 
 .prose-manifesto {
   font-size: 1.05rem;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--color-muted);
 }
 
 .prose-manifesto-commitment {
   font-size: 1.25rem;
-  line-height: 1.65;
+  line-height: 1.7;
   color: var(--color-ink);
 }
 
 @media (min-width: 768px) {
   .prose-manifesto-commitment {
-    font-size: 1.5rem;
+    font-size: 1.55rem;
   }
 }
 
 .prose-manifesto p {
-  margin: 0.85rem 0;
+  margin: 0.9rem 0;
 }
 
 .prose-manifesto strong {
@@ -53,10 +85,24 @@ body {
   font-weight: 600;
 }
 
-@keyframes fade-up {
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes hero-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -64,14 +110,36 @@ body {
   }
 }
 
-.animate-fade-up {
-  animation: fade-up 0.7s ease-out both;
+.hero-stagger {
+  opacity: 0;
+  animation: hero-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.animate-fade-up-delay {
-  animation: fade-up 0.7s ease-out 0.12s both;
+.hero-stagger-1 {
+  animation-delay: 0.05s;
 }
 
-.animate-fade-up-late {
-  animation: fade-up 0.7s ease-out 0.24s both;
+.hero-stagger-2 {
+  animation-delay: 0.16s;
+}
+
+.hero-stagger-3 {
+  animation-delay: 0.28s;
+}
+
+.hero-stagger-4 {
+  animation-delay: 0.4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hero-stagger {
+    opacity: 1;
+    animation: none;
+  }
 }
