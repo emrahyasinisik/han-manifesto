@@ -92,8 +92,14 @@ Author edits Markdown → build/render → static HTML. No runtime DB.
 - Zero signature/auth surface
 - Turkish-only, accessible typography, works on mobile and desktop
 
+## Brand assets
+
+- Favicon, icons, and any wordmarks must be **HAN-original** (Grid Ledger palette).
+- Do **not** reuse Masterfabric favicons, logos, or brand files.
+- Do **not** ship Next.js / Vercel scaffold icons as product branding.
+
 ## Open items (non-blocking)
 
-- Exact webfont pairing beyond “serif + sans”
+- Exact webfont pairing beyond “serif + sans” (plan locks Newsreader + IBM Plex Sans)
 - Final hero thesis wording polish during implementation
-- Hosting subdomain (e.g. under masterfabric.co) — decide at deploy time
+- Hosting subdomain — decide at deploy time (HAN-branded; not Masterfabric assets)

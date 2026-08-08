@@ -13,9 +13,10 @@
 - Site content language: Turkish only
 - No signatures, GitHub OAuth, Supabase, waitlist, auth, or product CTAs
 - Visual direction: Grid Ledger (`#FAFAF8` + subtle grid, amber `#B45309`, serif + sans — not JetBrains Mono / Masterfabric clone)
+- **Brand assets must be HAN-original:** no Masterfabric favicons, logos, wordmarks, or copied brand files; replace Next.js/Vercel scaffold icons with a HAN mark (Grid Ledger amber/ink)
 - Content source of truth: Markdown under `content/`
 - Spec: `docs/superpowers/specs/2026-08-08-han-manifesto-design.md`
-- Project root: `/Users/emrah/Desktop/han-manifesto`
+- Project root: `/Users/emrah/Desktop/han-manifesto` (implementation worktree: `.worktrees/han-manifesto`)
 - Keep `.superpowers/` gitignored (already in `.gitignore`)
 
 ## File map
