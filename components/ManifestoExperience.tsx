@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import type { ManifestoDoc } from "@/lib/manifesto";
+import { HanMark } from "@/components/HanMark";
 import { ManifestoHeader } from "@/components/ManifestoHeader";
 import { ManifestoSection } from "@/components/ManifestoSection";
 import { Reveal } from "@/components/Reveal";
@@ -32,6 +33,13 @@ export function ManifestoExperience({ doc }: Props) {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delayMs={80}>
+          <HanMark
+            brand={doc.frontmatter.brand}
+            subline={doc.frontmatter.subline}
+          />
+        </Reveal>
       </div>
     </main>
   );
