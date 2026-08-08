@@ -28,7 +28,7 @@ export function Reveal({ children, className = "", delayMs = 0 }: Props) {
           observer.disconnect();
         }
       },
-      { threshold: 0.14, rootMargin: "0px 0px -10% 0px" },
+      { threshold: 0.12, rootMargin: "0px 0px -12% 0px" },
     );
 
     observer.observe(node);

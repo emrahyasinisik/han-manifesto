@@ -50,4 +50,32 @@ Shared language. Intelligence above. No write without approval.
     expect(doc.sections[0].html).toContain("shared schema");
     expect(doc.commitmentHtml).toContain("No write without approval");
   });
+
+  it("still accepts legacy Taahhüt commitment heading", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "han-manifesto-"));
+    dirs.push(dir);
+    writeFileSync(
+      join(dir, "manifesto.md"),
+      `---
+brand: HAN
+subline: Hub for Agent Networks
+title: Title
+intro: Intro
+---
+
+## Principle
+
+Body.
+
+## Taahhüt
+
+Legacy commitment line.
+`,
+      "utf8",
+    );
+
+    const doc = await loadManifesto(join(dir, "manifesto.md"));
+    expect(doc.sections).toHaveLength(1);
+    expect(doc.commitmentHtml).toContain("Legacy commitment line");
+  });
 });

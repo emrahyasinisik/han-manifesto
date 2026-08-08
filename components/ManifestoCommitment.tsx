@@ -2,7 +2,7 @@ type Props = { html: string };
 
 export function ManifestoCommitment({ html }: Props) {
   return (
-    <footer className="manifesto-commitment relative">
+    <footer className="manifesto-commitment">
       <div
         aria-hidden
         className="pointer-events-none absolute -left-6 top-12 h-28 w-28 rounded-full bg-[var(--color-amber)]/10 blur-2xl md:-left-10"

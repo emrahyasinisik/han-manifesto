@@ -6,7 +6,7 @@ type Props = {
 
 export function ManifestoSection({ index, title, html }: Props) {
   return (
-    <section className="manifesto-section group">
+    <section className="manifesto-section">
       <div className="manifesto-section__rail" aria-hidden>
         <span className="ms-index manifesto-section__index font-serif">
           {index}
@@ -15,9 +15,7 @@ export function ManifestoSection({ index, title, html }: Props) {
       </div>
 
       <div className="manifesto-section__main">
-        <h2 className="ms-title manifesto-section__title font-serif">
-          {title}
-        </h2>
+        <h2 className="ms-title manifesto-section__title font-serif">{title}</h2>
         <div className="ms-body manifesto-section__panel">
           <div
             className="prose-manifesto manifesto-section__prose"
