@@ -21,6 +21,8 @@ node_modules/
 
 # testing
 /coverage
+/tmp-qa/
+.playwright-mcp/
 
 # next.js
 /.next/

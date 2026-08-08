@@ -37,9 +37,9 @@ body {
     ),
     linear-gradient(
       180deg,
-      rgba(250, 250, 248, 0.2),
-      rgba(250, 250, 248, 0.88) 45%,
-      var(--color-paper) 100%
+      rgba(250, 250, 248, 0.08),
+      rgba(250, 250, 248, 0.55) 55%,
+      rgba(250, 250, 248, 0.82) 100%
     );
 }
 
@@ -54,7 +54,111 @@ body {
   mask-image: radial-gradient(circle at center, black 20%, transparent 72%);
 }
 
-/* Scroll-linked cable network → HAN */
+/* R3F scroll-driven cables → HAN (behind main content) */
+.ambient-cables-3d {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.42;
+  /* Soften center reading column; keep edges + lower hub stronger */
+  mask-image:
+    linear-gradient(
+      90deg,
+      #000 0%,
+      #000 10%,
+      rgb(0 0 0 / 0.45) 34%,
+      rgb(0 0 0 / 0.28) 50%,
+      rgb(0 0 0 / 0.45) 66%,
+      #000 90%,
+      #000 100%
+    ),
+    linear-gradient(
+      180deg,
+      #000 0%,
+      rgb(0 0 0 / 0.75) 28%,
+      rgb(0 0 0 / 0.55) 52%,
+      #000 78%,
+      #000 100%
+    );
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(
+      90deg,
+      #000 0%,
+      #000 10%,
+      rgb(0 0 0 / 0.45) 34%,
+      rgb(0 0 0 / 0.28) 50%,
+      rgb(0 0 0 / 0.45) 66%,
+      #000 90%,
+      #000 100%
+    ),
+    linear-gradient(
+      180deg,
+      #000 0%,
+      rgb(0 0 0 / 0.75) 28%,
+      rgb(0 0 0 / 0.55) 52%,
+      #000 78%,
+      #000 100%
+    );
+  -webkit-mask-composite: source-in;
+}
+
+@media (min-width: 768px) {
+  .ambient-cables-3d {
+    opacity: 0.52;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ambient-cables-3d {
+    opacity: 0.6;
+  }
+}
+
+.ambient-cables-3d__canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.ambient-cables-3d__han {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: clamp(5.5rem, 24vw, 15rem);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+  color: color-mix(in srgb, var(--color-amber) 48%, var(--color-ink));
+  user-select: none;
+  mix-blend-mode: multiply;
+}
+
+.ambient-cables-3d--static .ambient-cables-3d__han {
+  color: color-mix(in srgb, var(--color-amber) 58%, var(--color-ink));
+}
+
+.manifesto-content {
+  isolation: isolate;
+}
+
+.manifesto-content h1,
+.manifesto-content .manifesto-section h2 {
+  text-shadow:
+    0 0 18px rgb(250 250 248 / 0.95),
+    0 1px 0 rgb(250 250 248 / 0.8);
+}
+
+.manifesto-content p {
+  text-shadow: 0 0 12px rgb(250 250 248 / 0.85);
+}
+
+/* Legacy SVG cables (kept for optional fallback / reference) */
 .scroll-cables {
   position: absolute;
   inset: 0;
@@ -62,18 +166,6 @@ body {
   pointer-events: none;
   overflow: hidden;
   opacity: 0.42;
-}
-
-@media (min-width: 768px) {
-  .scroll-cables {
-    opacity: 0.62;
-  }
-}
-
-@media (min-width: 1024px) {
-  .scroll-cables {
-    opacity: 0.72;
-  }
 }
 
 .scroll-cables__svg {
@@ -97,19 +189,6 @@ body {
   color: var(--color-ink);
   user-select: none;
   mix-blend-mode: multiply;
-}
-
-.scroll-cables--static .scroll-cables__han {
-  opacity: 0.08;
-  color: color-mix(in srgb, var(--color-amber) 55%, var(--color-ink));
-}
-
-.scroll-cables:not(.scroll-cables--static) .scroll-cables__han {
-  color: color-mix(in srgb, var(--color-amber) 40%, var(--color-ink));
-}
-
-.scroll-cables[data-stroke-ready="false"] .scroll-cables__strand {
-  opacity: 0;
 }
 
 .font-serif {
