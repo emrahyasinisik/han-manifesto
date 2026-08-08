@@ -1,5 +1,7 @@
 export type Severity = "critical" | "medium" | "low";
 
+export type IssueKind = "title" | "description" | "image" | "attribute";
+
 export type Store = {
   id: string;
   platform: "Shopify" | "Trendyol" | "Hepsiburada";
@@ -10,12 +12,18 @@ export type Store = {
 
 export type Issue = {
   id: string;
+  kind: IssueKind;
   field: string;
   severity: Severity;
   problem: string;
   suggestion: string;
-  current: string;
-  proposed: string;
+  /** Before value (text) or caption for image before */
+  before: string;
+  /** After / proposed value */
+  after: string;
+  /** Optional visual mock labels for image comparisons */
+  beforeVisual?: string;
+  afterVisual?: string;
 };
 
 export type DemoProduct = {
@@ -23,6 +31,7 @@ export type DemoProduct = {
   title: string;
   platform: Store["platform"];
   ucpScore: number;
+  imageCount: number;
   issues: Issue[];
 };
 
@@ -53,39 +62,48 @@ export const DEMO_STORES: Store[] = [
 export const DEMO_PRODUCTS: DemoProduct[] = [
   {
     id: "p1",
-    title: "Linen Lounge Shirt — Sand",
+    title: "Linen Shirt",
     platform: "Shopify",
     ucpScore: 41,
+    imageCount: 1,
     issues: [
       {
         id: "i1",
-        field: "title",
+        kind: "title",
+        field: "name",
         severity: "critical",
-        problem: "Title is short and missing primary attributes for agents.",
+        problem:
+          "Name is too short for agents — missing brand, material, and color.",
         suggestion:
-          "Lead with brand + product + material + color so catalog agents can ground the item.",
-        current: "Linen Shirt",
-        proposed: "Atelier North Linen Lounge Shirt — Sand, Unisex",
+          "Rename using brand + product + material + color so catalog agents can ground the SKU.",
+        before: "Linen Shirt",
+        after: "Atelier North Linen Lounge Shirt — Sand, Unisex",
       },
       {
         id: "i2",
+        kind: "description",
         field: "description",
         severity: "medium",
-        problem: "Description is thin for UCP / agent-ready catalog quality.",
+        problem: "Description is too thin for UCP / agent-ready quality.",
         suggestion:
-          "Add material, fit, care, and use-case sentences; keep keyword density natural.",
-        current: "Soft linen shirt for summer.",
-        proposed:
+          "Expand with material, fit, care, and use-case; keep keywords natural.",
+        before: "Soft linen shirt for summer.",
+        after:
           "Breathable European linen lounge shirt in sand. Relaxed fit, mother-of-pearl buttons, garment-washed for soft hand-feel. Pair with tailored trousers or travel layers. Machine wash cold; line dry.",
       },
       {
         id: "i3",
-        field: "attributes",
-        severity: "medium",
-        problem: "Material and gender attributes are empty.",
-        suggestion: "Fill schema attributes used by GMC / UCP item mapping.",
-        current: "material: — · gender: —",
-        proposed: "material: linen · gender: unisex",
+        kind: "image",
+        field: "photos",
+        severity: "critical",
+        problem:
+          "Only one photo; crop is tight and background competes with the garment.",
+        suggestion:
+          "Use a clean hero + detail + lifestyle set (3–5 images) with readable framing.",
+        before: "1 photo · busy background · tight crop",
+        after: "5 photos · clean hero · detail + lifestyle",
+        beforeVisual: "Single cluttered shot",
+        afterVisual: "Hero + detail pack",
       },
     ],
   },
@@ -94,24 +112,40 @@ export const DEMO_PRODUCTS: DemoProduct[] = [
     title: "Ceramic Pour-Over Set",
     platform: "Trendyol",
     ucpScore: 58,
+    imageCount: 1,
     issues: [
       {
         id: "i4",
-        field: "images",
+        kind: "image",
+        field: "photos",
         severity: "critical",
-        problem: "Only one image; agents and storefronts expect a set.",
-        suggestion: "Provide at least 3–5 angles including scale reference.",
-        current: "1 image",
-        proposed: "5 images (hero, detail, pour, lifestyle, packing)",
+        problem: "Single image; no scale reference for agents or shoppers.",
+        suggestion: "Add angles including scale and pour-in-use context.",
+        before: "1 image · no scale",
+        after: "5 images · scale + pour + packing",
+        beforeVisual: "Lone product tile",
+        afterVisual: "Multi-angle set",
       },
       {
         id: "i5",
-        field: "slug",
+        kind: "title",
+        field: "name",
+        severity: "medium",
+        problem: "Name omits material and set composition.",
+        suggestion: "State ceramic + dripper + carafe in the title.",
+        before: "Ceramic Pour-Over Set",
+        after: "Stoneware Pour-Over Set — Dripper + Carafe",
+      },
+      {
+        id: "i6",
+        kind: "description",
+        field: "description",
         severity: "low",
-        problem: "URL slug is an opaque ID.",
-        suggestion: "Use a readable, keyword-bearing slug.",
-        current: "/product/884201",
-        proposed: "/product/ceramic-pour-over-set",
+        problem: "Missing capacity and care details agents expect.",
+        suggestion: "Add volume, glaze type, and dishwasher guidance.",
+        before: "Nice ceramic coffee set.",
+        after:
+          "Matte stoneware pour-over set: 02 dripper and 600ml carafe. Food-safe glaze. Hand wash recommended to preserve finish.",
       },
     ],
   },
@@ -120,42 +154,71 @@ export const DEMO_PRODUCTS: DemoProduct[] = [
     title: "Wool Cap — Charcoal",
     platform: "Hepsiburada",
     ucpScore: 73,
+    imageCount: 3,
     issues: [
       {
-        id: "i6",
+        id: "i7",
+        kind: "description",
         field: "description",
         severity: "low",
-        problem: "Near-duplicate copy of another SKU (cannibalization risk).",
-        suggestion: "Differentiate fabric weight and seasonality for this colorway.",
-        current: "Warm wool cap for cold days.",
-        proposed:
+        problem: "Near-duplicate copy of another colorway (cannibalization).",
+        suggestion: "Differentiate knit density and seasonality for charcoal.",
+        before: "Warm wool cap for cold days.",
+        after:
           "Charcoal merino blend cap with a denser knit for wind. Mid-weight for city winters; unlined brim keeps silhouette clean.",
+      },
+      {
+        id: "i8",
+        kind: "image",
+        field: "photos",
+        severity: "medium",
+        problem: "No on-model or texture close-up; agents under-index material.",
+        suggestion: "Add fabric macro + wear shot beside the packshot.",
+        before: "3 packshots only",
+        after: "Packshot + macro + on-model",
+        beforeVisual: "Flat packshots",
+        afterVisual: "Texture + wear",
       },
     ],
   },
   {
     id: "p4",
-    title: "Desk Tray — Oak",
+    title: "OAK DESK TRAY BEST ORGANIZER WOOD TRAY",
     platform: "Shopify",
     ucpScore: 36,
+    imageCount: 2,
     issues: [
       {
-        id: "i7",
-        field: "title",
+        id: "i9",
+        kind: "title",
+        field: "name",
         severity: "critical",
-        problem: "ALL CAPS / stuffing pattern detected.",
-        suggestion: "Use sentence case; put the primary keyword near the front.",
-        current: "OAK DESK TRAY BEST ORGANIZER WOOD TRAY",
-        proposed: "Oak Desk Tray — Catchall Organizer",
+        problem: "ALL CAPS / keyword stuffing hurts agent parsing and SEO.",
+        suggestion: "Sentence case; primary keyword near the front.",
+        before: "OAK DESK TRAY BEST ORGANIZER WOOD TRAY",
+        after: "Oak Desk Tray — Catchall Organizer",
       },
       {
-        id: "i8",
-        field: "price",
+        id: "i10",
+        kind: "image",
+        field: "photos",
         severity: "medium",
-        problem: "Price present but currency metadata incomplete for UCP item.",
-        suggestion: "Emit explicit currency on the normalized item.",
-        current: "price: 890",
-        proposed: "price: 890 · currency: TRY",
+        problem: "Photos are dark; edge of tray is clipped.",
+        suggestion: "Re-light on paper-neutral background; full silhouette in frame.",
+        before: "Dark · clipped edges",
+        after: "Even light · full tray in frame",
+        beforeVisual: "Dark clipped shot",
+        afterVisual: "Clear full frame",
+      },
+      {
+        id: "i11",
+        kind: "attribute",
+        field: "attributes",
+        severity: "medium",
+        problem: "Material / dimensions missing on normalized UCP item.",
+        suggestion: "Fill schema attributes used by GMC / UCP mapping.",
+        before: "material: — · size: —",
+        after: "material: oak · size: 28×18×3 cm",
       },
     ],
   },

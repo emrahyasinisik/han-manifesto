@@ -890,6 +890,138 @@ body {
   transition: width 0.25s ease;
 }
 
+.demo-modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgb(17 17 17 / 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.demo-modal {
+  width: min(920px, 100%);
+  max-height: min(88vh, 900px);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-ink);
+  background: var(--color-paper);
+  box-shadow: 0 24px 60px rgb(17 17 17 / 0.18);
+}
+
+.demo-modal__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 1.15rem 1.2rem 1rem;
+  border-bottom: 1px solid var(--color-grid);
+}
+
+.demo-modal__title {
+  margin: 0.15rem 0 0;
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.demo-modal__meta {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: var(--color-muted);
+}
+
+.demo-modal__body {
+  overflow: auto;
+  padding: 1rem 1.2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.demo-modal__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.9rem 1.2rem 1.1rem;
+  border-top: 1px solid var(--color-grid);
+}
+
+.demo-issue--modal {
+  background: color-mix(in srgb, var(--color-paper) 92%, white);
+}
+
+.demo-issue__status {
+  margin-left: auto;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.demo-compare {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+@media (min-width: 720px) {
+  .demo-compare {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.demo-photo {
+  min-height: 8.5rem;
+  border: 1px solid var(--color-grid);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  padding: 0.85rem;
+  background:
+    linear-gradient(145deg, rgb(17 17 17 / 0.06), transparent 55%),
+    repeating-linear-gradient(
+      -12deg,
+      transparent,
+      transparent 8px,
+      rgb(17 17 17 / 0.03) 8px,
+      rgb(17 17 17 / 0.03) 9px
+    ),
+    var(--color-paper);
+}
+
+.demo-photo span {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.demo-photo small {
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.demo-photo--before {
+  opacity: 0.92;
+}
+
+.demo-photo--after {
+  border-color: color-mix(in srgb, var(--color-amber) 55%, var(--color-grid));
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--color-amber) 14%, transparent),
+      transparent 55%
+    ),
+    var(--color-paper);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;

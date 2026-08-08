@@ -12,14 +12,12 @@ import {
   type Severity,
 } from "@/lib/demo-data";
 
-type Step = "dashboard" | "products" | "report" | "queue";
-
+type Step = "dashboard" | "products" | "queue";
 type Decision = "pending" | "approved" | "rejected";
 
 const STEPS: { id: Step; label: string }[] = [
   { id: "dashboard", label: "Dashboard" },
   { id: "products", label: "Products" },
-  { id: "report", label: "Report" },
   { id: "queue", label: "Apply" },
 ];
 
@@ -29,18 +27,25 @@ function severityClass(severity: Severity): string {
   return "demo-pill demo-pill--low";
 }
 
+function kindLabel(kind: Issue["kind"]): string {
+  if (kind === "title") return "Name";
+  if (kind === "description") return "Description";
+  if (kind === "image") return "Photos";
+  return "Attributes";
+}
+
 export function DemoPanel() {
   const [step, setStep] = useState<Step>("dashboard");
   const [scanning, setScanning] = useState(false);
   const [scanned, setScanned] = useState(false);
-  const [selectedId, setSelectedId] = useState(DEMO_PRODUCTS[0]?.id ?? "");
+  const [modalProductId, setModalProductId] = useState<string | null>(null);
   const [decisions, setDecisions] = useState<Record<string, Decision>>({});
   const [queueProgress, setQueueProgress] = useState(0);
   const [queueRunning, setQueueRunning] = useState(false);
 
-  const selected = useMemo(
-    () => DEMO_PRODUCTS.find((p) => p.id === selectedId) ?? DEMO_PRODUCTS[0],
-    [selectedId],
+  const modalProduct = useMemo(
+    () => DEMO_PRODUCTS.find((p) => p.id === modalProductId) ?? null,
+    [modalProductId],
   );
 
   const avg = averageScore(DEMO_PRODUCTS);
@@ -65,7 +70,7 @@ export function DemoPanel() {
       setScanning(false);
       setScanned(true);
       setStep("products");
-    }, 1600);
+    }, 1700);
     return () => window.clearTimeout(timer);
   }, [scanning]);
 
@@ -85,8 +90,26 @@ export function DemoPanel() {
     return () => window.clearInterval(id);
   }, [queueRunning]);
 
+  useEffect(() => {
+    if (!modalProductId) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setModalProductId(null);
+    };
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [modalProductId]);
+
   function setDecision(issueId: string, value: Decision) {
     setDecisions((prev) => ({ ...prev, [issueId]: value }));
+  }
+
+  function openProduct(id: string) {
+    setModalProductId(id);
   }
 
   return (
@@ -97,10 +120,11 @@ export function DemoPanel() {
         <header className="demo-topbar">
           <div>
             <p className="demo-eyebrow">HAN · Panel demo</p>
-            <h1 className="font-serif demo-title">UCP readiness mock</h1>
+            <h1 className="font-serif demo-title">Product analysis mock</h1>
             <p className="demo-lede">
-              Fake data only — connect stores, scan for schema/SEO gaps, review
-              AI suggestions, then apply in rate-limited chunks.
+              Analyzes name, description, and photos — then proposes fixes.
+              Each suggestion opens before/after side-by-side and needs its own
+              approval.
             </p>
           </div>
           <Link href="/" className="demo-link">
@@ -176,10 +200,10 @@ export function DemoPanel() {
                 onClick={() => setScanning(true)}
               >
                 {scanning
-                  ? "Scanning catalog…"
+                  ? "Analyzing photos, names & copy…"
                   : scanned
-                    ? "Scan again"
-                    : "Scan products"}
+                    ? "Run analysis again"
+                    : "Analyze products"}
               </button>
               {scanned && (
                 <button
@@ -193,7 +217,8 @@ export function DemoPanel() {
             </div>
             {scanning && (
               <p className="demo-hint" role="status">
-                Rule engine + classifier running on normalized UCP items…
+                Checking images, titles, and descriptions against UCP / SEO
+                rules…
               </p>
             )}
           </section>
@@ -202,8 +227,11 @@ export function DemoPanel() {
         {step === "products" && (
           <section className="demo-panel">
             <div className="demo-panel__head">
-              <h2 className="font-serif">Scanned products</h2>
-              <p>Sorted by impact — lowest UCP score first.</p>
+              <h2 className="font-serif">Analysis results</h2>
+              <p>
+                Open a product to review each suggestion in a popup — approve or
+                reject one by one.
+              </p>
             </div>
             <ul className="demo-product-list">
               {[...DEMO_PRODUCTS]
@@ -212,121 +240,42 @@ export function DemoPanel() {
                   const critical = product.issues.filter(
                     (i) => i.severity === "critical",
                   ).length;
-                  const medium = product.issues.filter(
-                    (i) => i.severity === "medium",
+                  const photoIssues = product.issues.filter(
+                    (i) => i.kind === "image",
                   ).length;
                   return (
                     <li key={product.id}>
                       <button
                         type="button"
-                        className={`demo-product ${selectedId === product.id ? "is-selected" : ""}`}
-                        onClick={() => {
-                          setSelectedId(product.id);
-                          setStep("report");
-                        }}
+                        className="demo-product"
+                        onClick={() => openProduct(product.id)}
                       >
                         <div>
                           <p className="demo-product__title">{product.title}</p>
                           <p className="demo-product__meta">
-                            {product.platform} · {product.issues.length} issues
+                            {product.platform} · {product.imageCount} photos ·{" "}
+                            {product.issues.length} suggestions
+                            {photoIssues > 0
+                              ? ` · ${photoIssues} photo`
+                              : ""}
                           </p>
                         </div>
                         <div className="demo-product__right">
                           <span className="demo-score font-serif">
                             {product.ucpScore}
                           </span>
-                          <span className="demo-product__badges">
-                            {critical > 0 && (
-                              <span className={severityClass("critical")}>
-                                {critical} critical
-                              </span>
-                            )}
-                            {medium > 0 && (
-                              <span className={severityClass("medium")}>
-                                {medium} medium
-                              </span>
-                            )}
-                          </span>
+                          {critical > 0 && (
+                            <span className={severityClass("critical")}>
+                              {critical} critical
+                            </span>
+                          )}
                         </div>
                       </button>
                     </li>
                   );
                 })}
             </ul>
-          </section>
-        )}
-
-        {step === "report" && selected && (
-          <section className="demo-panel">
-            <div className="demo-panel__head">
-              <h2 className="font-serif">{selected.title}</h2>
-              <p>
-                Score {selected.ucpScore}/100 · review each suggestion before
-                write-back.
-              </p>
-            </div>
-
-            <div className="demo-issue-list">
-              {selected.issues.map((issue) => {
-                const decision = decisions[issue.id] ?? "pending";
-                return (
-                  <article key={issue.id} className="demo-issue">
-                    <div className="demo-issue__top">
-                      <span className={severityClass(issue.severity)}>
-                        {issue.severity}
-                      </span>
-                      <span className="demo-issue__field">{issue.field}</span>
-                    </div>
-                    <p className="demo-issue__problem">{issue.problem}</p>
-                    <p className="demo-issue__suggestion">{issue.suggestion}</p>
-                    <div className="demo-diff">
-                      <div>
-                        <p className="demo-diff__label">Current</p>
-                        <p className="demo-diff__body">{issue.current}</p>
-                      </div>
-                      <div>
-                        <p className="demo-diff__label">Proposed</p>
-                        <p className="demo-diff__body demo-diff__body--proposed">
-                          {issue.proposed}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="demo-actions">
-                      <button
-                        type="button"
-                        className={`demo-btn ${decision === "approved" ? "demo-btn--primary" : ""}`}
-                        onClick={() => setDecision(issue.id, "approved")}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        type="button"
-                        className={`demo-btn ${decision === "rejected" ? "is-muted-active" : ""}`}
-                        onClick={() => setDecision(issue.id, "rejected")}
-                      >
-                        Reject
-                      </button>
-                      <span className="demo-hint">
-                        {decision === "pending"
-                          ? "Awaiting decision"
-                          : decision === "approved"
-                            ? "Queued for apply"
-                            : "Skipped"}
-                      </span>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-
-            <div className="demo-actions">
-              <button
-                type="button"
-                className="demo-btn"
-                onClick={() => setStep("products")}
-              >
-                Back to products
-              </button>
+            <div className="demo-actions" style={{ marginTop: "1.25rem" }}>
               <button
                 type="button"
                 className="demo-btn demo-btn--primary"
@@ -344,15 +293,15 @@ export function DemoPanel() {
             <div className="demo-panel__head">
               <h2 className="font-serif">Chunked apply</h2>
               <p>
-                Approved fixes ship in small batches with jitter — never a single
-                burst write.
+                Only individually approved suggestions enter the queue — then
+                apply in small rate-limited batches.
               </p>
             </div>
 
             {approvedIssues.length === 0 ? (
               <p className="demo-hint">
-                No approved suggestions yet. Open a product report and approve at
-                least one fix.
+                Nothing approved yet. Open a product popup and approve suggestions
+                one by one.
               </p>
             ) : (
               <>
@@ -361,13 +310,13 @@ export function DemoPanel() {
                     <li key={issue.id} className="demo-queue-item">
                       <span className="font-serif">{product.title}</span>
                       <span>
-                        {issue.field} · {issue.severity}
+                        {kindLabel(issue.kind)} · {issue.severity}
                       </span>
                     </li>
                   ))}
                 </ul>
 
-                <div className="demo-progress" aria-hidden={!queueRunning}>
+                <div className="demo-progress">
                   <div
                     className="demo-progress__bar"
                     style={{ width: `${queueProgress}%` }}
@@ -375,9 +324,9 @@ export function DemoPanel() {
                 </div>
                 <p className="demo-hint" role="status">
                   {queueRunning
-                    ? `Applying batch… ${queueProgress}% (rate-limit aware)`
+                    ? `Applying batch… ${queueProgress}%`
                     : queueProgress >= 100
-                      ? "Demo complete — audit log written; rollback snapshot kept."
+                      ? "Demo complete — each write logged; rollback snapshot kept."
                       : "Ready to simulate apply."}
                 </p>
 
@@ -393,9 +342,9 @@ export function DemoPanel() {
                   <button
                     type="button"
                     className="demo-btn"
-                    onClick={() => setStep("dashboard")}
+                    onClick={() => setStep("products")}
                   >
-                    Back to dashboard
+                    Back to products
                   </button>
                 </div>
               </>
@@ -403,6 +352,136 @@ export function DemoPanel() {
           </section>
         )}
       </div>
+
+      {modalProduct && (
+        <div
+          className="demo-modal-root"
+          role="presentation"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) setModalProductId(null);
+          }}
+        >
+          <div
+            className="demo-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="demo-modal-title"
+          >
+            <header className="demo-modal__header">
+              <div>
+                <p className="demo-eyebrow">Suggestion review</p>
+                <h2 id="demo-modal-title" className="font-serif demo-modal__title">
+                  {modalProduct.title}
+                </h2>
+                <p className="demo-modal__meta">
+                  Score {modalProduct.ucpScore}/100 · {modalProduct.platform} ·{" "}
+                  {modalProduct.imageCount} photos analyzed
+                </p>
+              </div>
+              <button
+                type="button"
+                className="demo-btn"
+                onClick={() => setModalProductId(null)}
+              >
+                Close
+              </button>
+            </header>
+
+            <div className="demo-modal__body">
+              {modalProduct.issues.map((issue) => {
+                const decision = decisions[issue.id] ?? "pending";
+                return (
+                  <article key={issue.id} className="demo-issue demo-issue--modal">
+                    <div className="demo-issue__top">
+                      <span className={severityClass(issue.severity)}>
+                        {issue.severity}
+                      </span>
+                      <span className="demo-issue__field">
+                        {kindLabel(issue.kind)}
+                      </span>
+                      <span className="demo-issue__status">
+                        {decision === "pending"
+                          ? "Needs approval"
+                          : decision === "approved"
+                            ? "Approved"
+                            : "Rejected"}
+                      </span>
+                    </div>
+                    <p className="demo-issue__problem">{issue.problem}</p>
+                    <p className="demo-issue__suggestion">{issue.suggestion}</p>
+
+                    <div className="demo-compare">
+                      <div className="demo-compare__col">
+                        <p className="demo-diff__label">Before</p>
+                        {issue.kind === "image" ? (
+                          <div className="demo-photo demo-photo--before">
+                            <span>{issue.beforeVisual ?? "Before"}</span>
+                            <small>{issue.before}</small>
+                          </div>
+                        ) : (
+                          <p className="demo-diff__body">{issue.before}</p>
+                        )}
+                      </div>
+                      <div className="demo-compare__col">
+                        <p className="demo-diff__label">After</p>
+                        {issue.kind === "image" ? (
+                          <div className="demo-photo demo-photo--after">
+                            <span>{issue.afterVisual ?? "After"}</span>
+                            <small>{issue.after}</small>
+                          </div>
+                        ) : (
+                          <p className="demo-diff__body demo-diff__body--proposed">
+                            {issue.after}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="demo-actions">
+                      <button
+                        type="button"
+                        className={`demo-btn ${decision === "approved" ? "demo-btn--primary" : ""}`}
+                        onClick={() => setDecision(issue.id, "approved")}
+                      >
+                        Approve this fix
+                      </button>
+                      <button
+                        type="button"
+                        className={`demo-btn ${decision === "rejected" ? "is-muted-active" : ""}`}
+                        onClick={() => setDecision(issue.id, "rejected")}
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+
+            <footer className="demo-modal__footer">
+              <p className="demo-hint">
+                Approvals are per suggestion — nothing writes back until you send
+                the queue.
+              </p>
+              <button
+                type="button"
+                className="demo-btn demo-btn--primary"
+                disabled={
+                  !modalProduct.issues.some(
+                    (issue) => decisions[issue.id] === "approved",
+                  )
+                }
+                onClick={() => {
+                  setModalProductId(null);
+                  setStep("queue");
+                }}
+              >
+                Go to apply queue
+              </button>
+            </footer>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
