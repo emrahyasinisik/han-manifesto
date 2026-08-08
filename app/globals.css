@@ -43,8 +43,33 @@ body {
     );
 }
 
+.protocol-field {
+  opacity: 1;
+}
+
 .manifesto-content {
   isolation: isolate;
+}
+
+/* Soft paper wash over the reading column so sparse nodes stay behind copy */
+.manifesto-content::before {
+  content: "";
+  position: absolute;
+  inset: -1.5rem -1.25rem;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    70% 55% at 50% 35%,
+    rgb(250 250 248 / 0.92) 0%,
+    rgb(250 250 248 / 0.72) 45%,
+    rgb(250 250 248 / 0) 78%
+  );
+}
+
+@media (min-width: 768px) {
+  .manifesto-content::before {
+    inset: -2rem -2.5rem;
+  }
 }
 
 .manifesto-content h1,
