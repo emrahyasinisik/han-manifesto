@@ -18,15 +18,15 @@ const AMBER = "180, 83, 9";
 const INK = "17, 17, 17";
 
 function nodeCountForWidth(width: number): number {
-  if (width < 640) return 10;
-  if (width < 1024) return 16;
-  return 22;
+  if (width < 640) return 18;
+  if (width < 1024) return 30;
+  return 42;
 }
 
 /** Prefer gutters so the reading column stays clear. */
 function placeX(width: number): number {
-  const gutter = Math.min(width * 0.28, 320);
-  if (Math.random() < 0.72 && width > 520) {
+  const gutter = Math.min(width * 0.32, 360);
+  if (Math.random() < 0.82 && width > 520) {
     return Math.random() < 0.5
       ? Math.random() * gutter
       : width - Math.random() * gutter;
@@ -37,15 +37,17 @@ function placeX(width: number): number {
 function seedNodes(width: number, height: number, count: number): Node[] {
   const nodes: Node[] = [];
   for (let i = 0; i < count; i++) {
-    const hub = i % 5 === 0;
+    const hub = i % 4 === 0;
     const amber = hub || i % 3 === 0;
     nodes.push({
       x: placeX(width),
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.14,
-      vy: (Math.random() - 0.5) * 0.11,
-      r: hub ? 2.6 + Math.random() * 1.6 : 1.4 + Math.random() * 1.2,
-      baseAlpha: hub ? 0.32 + Math.random() * 0.12 : 0.16 + Math.random() * 0.12,
+      vx: (Math.random() - 0.5) * 0.26,
+      vy: (Math.random() - 0.5) * 0.2,
+      r: hub ? 3.6 + Math.random() * 2.4 : 2.1 + Math.random() * 1.7,
+      baseAlpha: hub
+        ? 0.52 + Math.random() * 0.2
+        : 0.3 + Math.random() * 0.18,
       hub,
       phase: Math.random() * Math.PI * 2,
       color: amber ? "amber" : "ink",
@@ -54,14 +56,31 @@ function seedNodes(width: number, height: number, count: number): Node[] {
   return nodes;
 }
 
+function drawNode(
+  ctx: CanvasRenderingContext2D,
+  n: Node,
+  alpha: number,
+  radius: number,
+) {
+  const rgb = n.color === "amber" ? AMBER : INK;
+
+  if (n.hub) {
+    ctx.beginPath();
+    ctx.fillStyle = `rgba(${rgb}, ${alpha * 0.22})`;
+    ctx.arc(n.x, n.y, radius * 2.6, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.beginPath();
+  ctx.fillStyle = `rgba(${rgb}, ${alpha})`;
+  ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+  ctx.fill();
+}
+
 function drawStatic(ctx: CanvasRenderingContext2D, nodes: Node[]) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   for (const n of nodes) {
-    const rgb = n.color === "amber" ? AMBER : INK;
-    ctx.beginPath();
-    ctx.fillStyle = `rgba(${rgb}, ${n.baseAlpha})`;
-    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-    ctx.fill();
+    drawNode(ctx, n, n.baseAlpha, n.r);
   }
 }
 
@@ -128,16 +147,15 @@ export function ProtocolField() {
         let alpha = n.baseAlpha;
         let radius = n.r;
         if (n.hub) {
-          const pulse = 0.5 + 0.5 * Math.sin(t * 0.0012 + n.phase);
-          alpha = n.baseAlpha * (0.75 + 0.25 * pulse);
-          radius = n.r * (0.92 + 0.12 * pulse);
+          const pulse = 0.5 + 0.5 * Math.sin(t * 0.002 + n.phase);
+          alpha = n.baseAlpha * (0.5 + 0.6 * pulse);
+          radius = n.r * (0.86 + 0.22 * pulse);
+        } else if (n.color === "amber") {
+          const pulse = 0.5 + 0.5 * Math.sin(t * 0.0014 + n.phase);
+          alpha = n.baseAlpha * (0.72 + 0.35 * pulse);
         }
 
-        const rgb = n.color === "amber" ? AMBER : INK;
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(${rgb}, ${alpha})`;
-        ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
-        ctx.fill();
+        drawNode(ctx, n, alpha, radius);
       }
 
       raf = requestAnimationFrame(tick);

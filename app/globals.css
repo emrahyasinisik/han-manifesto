@@ -35,11 +35,12 @@ body {
       rgba(17, 17, 17, 0.04),
       transparent 50%
     ),
+    /* Keep edges open so protocol dots stay readable while scrolling */
     linear-gradient(
       180deg,
-      rgba(250, 250, 248, 0.08),
-      rgba(250, 250, 248, 0.55) 55%,
-      rgba(250, 250, 248, 0.82) 100%
+      rgba(250, 250, 248, 0.02),
+      rgba(250, 250, 248, 0.22) 55%,
+      rgba(250, 250, 248, 0.42) 100%
     );
 }
 
@@ -51,7 +52,7 @@ body {
   isolation: isolate;
 }
 
-/* Soft paper wash over the reading column so sparse nodes stay behind copy */
+/* Soft paper wash over the reading column — center only, leave gutters open */
 .manifesto-content::before {
   content: "";
   position: absolute;
@@ -59,10 +60,10 @@ body {
   z-index: -1;
   pointer-events: none;
   background: radial-gradient(
-    70% 55% at 50% 35%,
-    rgb(250 250 248 / 0.92) 0%,
-    rgb(250 250 248 / 0.72) 45%,
-    rgb(250 250 248 / 0) 78%
+    58% 48% at 50% 35%,
+    rgb(250 250 248 / 0.88) 0%,
+    rgb(250 250 248 / 0.58) 42%,
+    rgb(250 250 248 / 0) 72%
   );
 }
 
