@@ -6,14 +6,12 @@
   --color-muted: #525252;
   --color-amber: #b45309;
   --color-grid: #e5e5e0;
-  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 .grid-ledger {
@@ -25,7 +23,7 @@ body {
 }
 
 .font-serif {
-  font-family: var(--font-serif);
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
 }
 
 .prose-manifesto {
